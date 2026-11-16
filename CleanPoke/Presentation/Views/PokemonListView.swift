@@ -29,7 +29,11 @@ struct PokemonListView: View {
                     .padding()
                 } else {
                     List(viewModel.pokemons) { pokemon in
-                        PokemonRow(pokemon: pokemon)
+                        PokemonRow(
+                            pokemon: pokemon,
+                            isFavorite: viewModel.isFavorite(pokemon),
+                            onToggleFavorite: { viewModel.toggleFavorite(pokemon) }
+                        )
                     }
                     .listStyle(.plain)
                 }
@@ -44,6 +48,8 @@ struct PokemonListView: View {
 
 private struct PokemonRow: View {
     let pokemon: Pokemon
+    let isFavorite: Bool
+    let onToggleFavorite: () -> Void
 
     var body: some View {
         HStack(spacing: 16) {
@@ -64,10 +70,20 @@ private struct PokemonRow: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
+
+            Spacer()
+
+            Button(action: onToggleFavorite) {
+                Image(systemName: isFavorite ? "heart.fill" : "heart")
+                    .foregroundStyle(isFavorite ? .red : .gray)
+                    .font(.title3)
+            }
+            .buttonStyle(.borderless)
         }
         .padding(.vertical, 4)
     }
 }
+
 
 #Preview {
     PokemonListView()

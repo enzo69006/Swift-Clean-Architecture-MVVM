@@ -6,12 +6,21 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct CleanPokeApp: App {
+    let modelContainer: ModelContainer
+    init() {
+        do {
+            modelContainer = try ModelContainer(for: FavoritePokemonModel.self)
+        } catch {
+            fatalError("Failed to create ModelContainer: \(error)")
+        }
+    }
     var body: some Scene {
         WindowGroup {
-            PokemonListView()
-        }
+            MainTabView()
+        }.modelContainer(for: FavoritePokemonModel.self)
     }
 }
